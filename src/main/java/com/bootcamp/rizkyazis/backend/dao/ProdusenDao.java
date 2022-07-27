@@ -1,10 +1,13 @@
 package com.bootcamp.rizkyazis.backend.dao;
 
+import com.bootcamp.rizkyazis.backend.dto.ProdusenDto;
 import com.bootcamp.rizkyazis.backend.entity.Produsen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -49,6 +52,19 @@ public class ProdusenDao {
                 return produsen;
             }
         });
+    }
+
+    public Integer create(ProdusenDto.Create produsen){
+        String query = "INSERT INTO public.produsen\n" +
+                "(nama, kode, alamat)\n" +
+                "VALUES(:nama, :kode, :alamat)";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("nama",produsen.getNama());
+        map.addValue("kode",produsen.getKode());
+        map.addValue("alamat",produsen.getAlamat());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query,map,keyHolder);
+        return (Integer) keyHolder.getKeys().get("id");
     }
 
 }
