@@ -79,4 +79,12 @@ public class ProdusenDao {
         jdbcTemplate.update(query,map);
     }
 
+    public void delete(Integer id){
+        String query = "DELETE FROM public.produsen\n" +
+                "WHERE id=:id";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("id",id);
+        jdbcTemplate.update(query,map);
+    }
+
 }

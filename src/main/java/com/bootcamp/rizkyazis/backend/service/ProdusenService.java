@@ -34,4 +34,9 @@ public class ProdusenService {
     public void update(ProdusenDto.Update produsen) {
         dao.update(produsen);
     }
+
+    @Transactional
+    public void delete(Integer id){
+        dao.delete(id);
+    }
 }

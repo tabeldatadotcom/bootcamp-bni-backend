@@ -61,7 +61,7 @@ public class ProdusenController {
             BindingResult result) {
         Map<String, Object> output = new HashMap<>();
         if (result.hasErrors()) {
-            output.put("status", "Create data gagal");
+            output.put("status", "Update data gagal");
             output.put("errors", result.getAllErrors());
             return ResponseEntity.badRequest().body(output);
         } else {
@@ -74,6 +74,21 @@ public class ProdusenController {
                 output.put("status", "Id tidak ditemukan");
                 return ResponseEntity.badRequest().body(output);
             }
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> delete
+            (@PathVariable Integer id) {
+        Map<String, Object> output = new HashMap<>();
+        try {
+            service.findId(id);
+            service.delete(id);
+            output.put("status", "Berhasil hapus data");
+            return ResponseEntity.ok(output);
+        } catch (EmptyResultDataAccessException e) {
+            output.put("status", "Id tidak ditemukan");
+            return ResponseEntity.badRequest().body(output);
         }
     }
 }
