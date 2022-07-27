@@ -20,12 +20,18 @@ public class ProdusenService {
             throws EmptyResultDataAccessException {
         return dao.findId(id);
     }
-    public List<Produsen> findAll(){
+
+    public List<Produsen> findAll() {
         return dao.findAll();
     }
 
     @Transactional
-    public Integer create(ProdusenDto.Create produsen){
+    public Integer create(ProdusenDto.Create produsen) {
         return dao.create(produsen);
+    }
+
+    @Transactional
+    public void update(ProdusenDto.Update produsen) {
+        dao.update(produsen);
     }
 }

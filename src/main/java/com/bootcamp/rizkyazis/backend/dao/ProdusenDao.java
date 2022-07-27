@@ -67,4 +67,16 @@ public class ProdusenDao {
         return (Integer) keyHolder.getKeys().get("id");
     }
 
+    public void update(ProdusenDto.Update produsen){
+        String query = "UPDATE public.produsen\n" +
+                "SET nama=:nama, kode=:kode, alamat=:alamat\n" +
+                "WHERE id=:id";
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("nama",produsen.getNama());
+        map.addValue("kode",produsen.getKode());
+        map.addValue("alamat",produsen.getAlamat());
+        map.addValue("id", produsen.getId());
+        jdbcTemplate.update(query,map);
+    }
+
 }

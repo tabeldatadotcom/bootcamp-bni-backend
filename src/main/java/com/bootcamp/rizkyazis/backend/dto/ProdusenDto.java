@@ -12,7 +12,29 @@ public class ProdusenDto {
 
     @Data
     @NoArgsConstructor
-    public static class Create{
+    public static class Create {
+        @Size(min = 5)
+        @NotEmpty
+        @NotNull
+        String nama;
+
+        @Size(min = 2)
+        @NotEmpty
+        @NotNull
+        String kode;
+
+        @NotEmpty
+        @NotNull
+        String alamat;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Update {
+        @NotNull
+        @Min(1)
+        Integer id;
+
         @Size(min = 5)
         @NotEmpty
         @NotNull

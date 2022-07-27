@@ -54,4 +54,26 @@ public class ProdusenController {
             return ResponseEntity.ok(output);
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, Object>> update(
+            @RequestBody @Valid ProdusenDto.Update produsen,
+            BindingResult result) {
+        Map<String, Object> output = new HashMap<>();
+        if (result.hasErrors()) {
+            output.put("status", "Create data gagal");
+            output.put("errors", result.getAllErrors());
+            return ResponseEntity.badRequest().body(output);
+        } else {
+            try {
+                service.findId(produsen.getId());
+                service.update(produsen);
+                output.put("status", "Berhasil update data");
+                return ResponseEntity.ok().body(output);
+            } catch (EmptyResultDataAccessException e) {
+                output.put("status", "Id tidak ditemukan");
+                return ResponseEntity.badRequest().body(output);
+            }
+        }
+    }
 }
