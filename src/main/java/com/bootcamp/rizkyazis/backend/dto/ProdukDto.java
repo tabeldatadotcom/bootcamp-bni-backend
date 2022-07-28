@@ -26,6 +26,10 @@ public class ProdukDto {
         @NotEmpty
         @NotNull
         String berat;
+
+        @Min(1)
+        @NotNull
+        Integer produsen_id;
     }
 
     @Data
@@ -48,5 +52,10 @@ public class ProdukDto {
         @NotEmpty
         @NotNull
         String berat;
+
+        @Min(1)
+        @NotNull
+        Integer produsen_id;
+
     }
 }

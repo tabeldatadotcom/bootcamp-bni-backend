@@ -91,12 +91,13 @@ public class ProdukDao {
 
     public Integer create(ProdukDto.Create produk) {
         String query = "INSERT INTO public.produk\n" +
-                "(nama, jenis, berat)\n" +
-                "VALUES(:nama, :jenis, :berat)";
+                "(nama, jenis, berat, produsen_id)\n" +
+                "VALUES(:nama, :jenis, :berat, :produsen_id)";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("nama", produk.getNama());
         map.addValue("jenis", produk.getJenis());
         map.addValue("berat", produk.getBerat());
+        map.addValue("produsen_id", produk.getProdusen_id());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, map, keyHolder);
         return (Integer) keyHolder.getKeys().get("id");
