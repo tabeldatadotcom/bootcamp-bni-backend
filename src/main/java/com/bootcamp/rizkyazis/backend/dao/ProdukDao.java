@@ -105,13 +105,15 @@ public class ProdukDao {
 
     public void update(ProdukDto.Update produk) {
         String query = "UPDATE public.produk\n" +
-                "SET nama=:nama, jenis=:jenis, berat=:berat\n" +
+                "SET nama=:nama, jenis=:jenis, berat=:berat, " +
+                "produsen_id=:produsen_id\n" +
                 "WHERE id=:id";
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue("nama", produk.getNama());
         map.addValue("jenis", produk.getJenis());
         map.addValue("berat", produk.getBerat());
         map.addValue("id", produk.getId());
+        map.addValue("produsen_id", produk.getProdusen_id());
         jdbcTemplate.update(query, map);
     }
 
