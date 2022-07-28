@@ -23,10 +23,19 @@ public class ProdukDao {
     NamedParameterJdbcTemplate jdbcTemplate;
 
     public Produk findId(Integer id) {
-        String query = "SELECT id, nama, jenis, berat\n" +
-                "FROM public.produk where id=:id";
+        String query = "SELECT produk.id, \n" +
+                "produk.nama, \n" +
+                "produk.jenis, \n" +
+                "produk.berat,\n" +
+                "produsen.id as produsen_id,\n" +
+                "produsen.nama as produsen_nama,\n" +
+                "produsen.kode as produsen_kode,\n" +
+                "produsen.alamat as produsen_alamat\n" +
+                "FROM public.produk produk\n" +
+                "left join produsen produsen on produk.produsen_id = produsen.id\n" +
+                "where produk.id = :idProduk";
         MapSqlParameterSource map = new MapSqlParameterSource();
-        map.addValue("id", id);
+        map.addValue("idProduk", id);
         return jdbcTemplate.queryForObject(query, map, new RowMapper<Produk>() {
             @Override
             public Produk mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -35,14 +44,30 @@ public class ProdukDao {
                 produk.setNama(rs.getString("nama"));
                 produk.setJenis(rs.getString("jenis"));
                 produk.setBerat(rs.getString("berat"));
+
+                Produsen produsen = new Produsen();
+                produsen.setId(rs.getInt("produsen_id"));
+                produsen.setNama(rs.getString("produsen_nama"));
+                produsen.setKode(rs.getString("produsen_kode"));
+                produsen.setAlamat(rs.getString("produsen_alamat"));
+
+                produk.setProdusen(produsen);
                 return produk;
             }
         });
     }
 
     public List<Produk> findAll() {
-        String query = "SELECT id, nama, jenis, berat\n" +
-                "FROM public.produk";
+        String query = "SELECT produk.id, \n" +
+                "produk.nama, \n" +
+                "produk.jenis, \n" +
+                "produk.berat,\n" +
+                "produsen.id as produsen_id,\n" +
+                "produsen.nama as produsen_nama,\n" +
+                "produsen.kode as produsen_kode,\n" +
+                "produsen.alamat as produsen_alamat\n" +
+                "FROM public.produk produk\n" +
+                "left join produsen produsen on produk.produsen_id = produsen.id";
         return jdbcTemplate.query(query, new RowMapper<Produk>() {
             @Override
             public Produk mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -51,6 +76,14 @@ public class ProdukDao {
                 produk.setNama(rs.getString("nama"));
                 produk.setJenis(rs.getString("jenis"));
                 produk.setBerat(rs.getString("berat"));
+
+                Produsen produsen = new Produsen();
+                produsen.setId(rs.getInt("produsen_id"));
+                produsen.setNama(rs.getString("produsen_nama"));
+                produsen.setKode(rs.getString("produsen_kode"));
+                produsen.setAlamat(rs.getString("produsen_alamat"));
+
+                produk.setProdusen(produsen);
                 return produk;
             }
         });
