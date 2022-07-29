@@ -28,6 +28,10 @@ public class ProdukService {
         return dao.findAll();
     }
 
+    public List<Produk> findAllByProdusen(Integer id) {
+        return dao.findAllByIdProdusen(id);
+    }
+
     @Transactional
     public Integer create(ProdukDto.Create produk) {
         return dao.create(produk);

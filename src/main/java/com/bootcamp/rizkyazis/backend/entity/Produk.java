@@ -8,6 +8,7 @@ public class Produk {
     String nama;
     String jenis;
     String berat;
+    Double harga;
     Produsen produsen;
 
     public Produk() {
@@ -53,6 +54,14 @@ public class Produk {
 
     public void setProdusen(Produsen produsen) {
         this.produsen = produsen;
+    }
+
+    public Double getHarga() {
+        return harga;
+    }
+
+    public void setHarga(Double harga) {
+        this.harga = harga;
     }
 }
 

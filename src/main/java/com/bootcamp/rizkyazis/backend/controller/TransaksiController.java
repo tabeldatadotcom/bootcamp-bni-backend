@@ -1,11 +1,9 @@
 package com.bootcamp.rizkyazis.backend.controller;
 
-import com.bootcamp.rizkyazis.backend.dto.ProdukDto;
-import com.bootcamp.rizkyazis.backend.dto.ProdusenDto;
-import com.bootcamp.rizkyazis.backend.entity.Produk;
-import com.bootcamp.rizkyazis.backend.entity.Produsen;
+import com.bootcamp.rizkyazis.backend.dto.TransaksiDto;
+import com.bootcamp.rizkyazis.backend.entity.Transaksi;
 import com.bootcamp.rizkyazis.backend.service.ProdukService;
-import com.bootcamp.rizkyazis.backend.service.ProdusenService;
+import com.bootcamp.rizkyazis.backend.service.TransaksiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,40 +17,44 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/produk")
+@RequestMapping("/api/transaksi")
 @Slf4j
-public class ProdukController {
+public class TransaksiController {
 
     @Autowired
-    ProdukService service;
+    TransaksiService service;
 
     @Autowired
-    ProdusenService produsenService;
+    ProdukService produkService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findId(@PathVariable Integer id) {
         try {
-            Produk produk = service.findId(id);
-            return ResponseEntity.ok(produk);
+            Transaksi transaksi = service.findId(id);
+            return ResponseEntity.ok(transaksi);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body("Data tidak ditemukan");
         }
     }
 
     @GetMapping("")
-    public List<Produk> findAll() {
+    public List<Transaksi> findAll() {
         return service.findAll();
     }
 
-    @GetMapping("/produsen/{id}")
-    public List<Produk> findAllByIdProdusen(@PathVariable Integer id) {
-        return service.findAllByProdusen(id);
+    @GetMapping("/produk/{id}")
+    public List<Transaksi> findAllByIdProduk(@PathVariable Integer id) {
+        return service.findAllByIdProduk(id);
     }
 
+    @GetMapping("/produsen/{id}")
+    public List<Transaksi> findAllByIdProdusen(@PathVariable Integer id) {
+        return service.findAllByIdProdusen(id);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create
-            (@RequestBody @Valid ProdukDto.Create produk,
+            (@RequestBody @Valid TransaksiDto.Create transaksi,
              BindingResult result) {
         Map<String, Object> output = new HashMap<>();
         if (result.hasErrors()) {
@@ -62,20 +64,22 @@ public class ProdukController {
             return ResponseEntity.badRequest().body(output);
         } else {
             try {
-                produsenService.findId(produk.getProdusen_id());
-                output.put("id", service.create(produk));
+                produkService.findId(transaksi.getProduk_id());
+                output.put("id", service.create(transaksi));
                 output.put("status", "Create data berhasil");
                 return ResponseEntity.ok(output);
             } catch (EmptyResultDataAccessException e) {
-                output.put("status", "Id tidak ditemukan");
+                output.put("id", null);
+                output.put("status", "Tidak dapat menemukan id produk");
                 return ResponseEntity.badRequest().body(output);
             }
+
         }
     }
 
     @PutMapping("/update")
     public ResponseEntity<Map<String, Object>> update(
-            @RequestBody @Valid ProdukDto.Update produk,
+            @RequestBody @Valid TransaksiDto.Update transaksi,
             BindingResult result) {
         Map<String, Object> output = new HashMap<>();
         if (result.hasErrors()) {
@@ -84,9 +88,9 @@ public class ProdukController {
             return ResponseEntity.badRequest().body(output);
         } else {
             try {
-                service.findId(produk.getId());
-                service.update(produk);
-                produsenService.findId(produk.getProdusen_id());
+                service.findId(transaksi.getId());
+                produkService.findId(transaksi.getProduk_id());
+                service.update(transaksi);
                 output.put("status", "Berhasil update data");
                 return ResponseEntity.ok().body(output);
             } catch (EmptyResultDataAccessException e) {
@@ -108,6 +112,16 @@ public class ProdukController {
         } catch (EmptyResultDataAccessException e) {
             output.put("status", "Id tidak ditemukan");
             return ResponseEntity.badRequest().body(output);
+        }
+    }
+
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<?> findIdDetail(@PathVariable Integer id) {
+        try {
+            TransaksiDto.Detail transaksi = service.findIdDetail(id);
+            return ResponseEntity.ok(transaksi);
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.badRequest().body("Data tidak ditemukan");
         }
     }
 }
